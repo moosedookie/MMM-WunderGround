@@ -1,9 +1,16 @@
 # Module: Weather Underground Forecast
-This is a module for MagicMirror, modified version of the default `weatherforecast` module. 
+This is a module for MagicMirror, modified version of the default `weatherforecast` module.
 
 This is similar to the default `weatherforecast` module, however it has additional functionality (such as displaying the probability of precipitation for each day). It also retrieves its data from Weather Underground instead of OpenWeatherMap.
 
 The Weather Icons used in this module are created and maintained by Erik Flowers. v1.0 artwork by Lukas Bischoff. v1.1 - 2.0 artwork by Erik Flowers www.weathericons.io
+
+
+## Installing the module
+Clone this repository in your `~/MagicMirror/modules/` folder `( $ cd ~MagicMirror/modules/ )`:
+````javascript
+git clone https://github.com/RedNax67/MMM-WunderGround.git
+````
 
 ## Using the module
 
@@ -25,7 +32,9 @@ modules: [
         alerttime: 10000,
         alerttruncatestring: "english:",
 	roundTmpDecs: 1,
-	UseCardinals: 0
+	UseCardinals: 0,
+	layout: "horizontal",
+	sysstat: 0
     }
 };
 ]
@@ -37,26 +46,21 @@ The following properties can be configured:
 
 
 <table width="100%">
-	<!-- why, markdown... -->
 	<thead>
 		<tr>
 			<th>Option</th>
 			<th width="100%">Description</th>
 		</tr>
-	<thead>
+	</thead>
 	<tbody>
-
 		<tr>
 			<td><code>pws</code></td>
-			<td>Can be any WU api location info.<br>
-				<br><b>US Example:</b> <code>NY/New_York</code>
-				<br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br>
-                                <br> This value is <b>REQUIRED</b>
+			<td>Can be any WU api location info.<br><br><b>US Example:</b> <code>NY/New_York</code><br><b>Example:</b> <code>locid:NLXX8014;loctype:1</code><br><br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
 		<tr>
 			<td><code>apikey</code></td>
-			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing" target="_blank">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
+			<td>The <a href="https://www.wunderground.com/weather/api/d/pricing">Weather Underground</a> API key, which can be obtained by creating an OpenWeatherMap account. You need either Cumulus or Anvil plan for this module. As long as you make less than 500 queries a day, this is free.<br>
 				<br> This value is <b>REQUIRED</b>
 			</td>
 		</tr>
@@ -65,6 +69,13 @@ The following properties can be configured:
 			<td>What units to use. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>config.units</code> = Specified by config.js, <code>default</code> = Kelvin, <code>metric</code> = Celsius, <code>imperial</code> =Fahrenheit
 				<br><b>Default value:</b> <code>config.units</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>coloricon</code></td>
+			<td>show Current Weather Icon in color<br>
+				<br><b>Possible values:</b> <code>true</code>, <code>false</code>
+				<br><b>Default value:</b> <code>false</code>
 			</td>
 		</tr>
 		<tr>
@@ -92,11 +103,27 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>scaletxt</code></td>
+			<td>Scale forecast text when over 3 lines. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will scale text)
+				<br>This value is optional. By default the forecast text will be scaled when needed.
+			</td>
+		</tr>
+        <tr>
+			<td><code>daily</code></td>
+			<td>Display daily forecasts. Specified by config.js<br>
+				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
+				<br><b>Default value:</b> <code>1</code> (Will display daily forecasts)
+				<br>This value is optional. By default the daily forecast will be displayed.
+			</td>
+		</tr>
+        <tr>
 			<td><code>hourly</code></td>
 			<td>Display hourly forecasts. Specified by config.js<br>
 				<br><b>Possible values:</b> <code>0</code> - <code>1</code>
 				<br><b>Default value:</b> <code>1</code> (Will display hourly forecasts)
-				<br>This value is optional. By default the forecast text will be displayed.
+				<br>This value is optional. By default the hourly forecast will be displayed.
 			</td>
 		</tr>
 		<tr>
@@ -130,7 +157,6 @@ The following properties can be configured:
 				<br><b>Default value:</b> <code>2000</code> (2 seconds)
 			</td>
 		</tr>
-
 		<tr>
 			<td><code>lang</code></td>
 			<td>The language of the days.<br>
@@ -188,6 +214,13 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
+			<td><code>windunits</code></td>
+			<td>Which units to use for windspeed<br>
+				<br><b>Possible values:</b> <code>"mph" or "bft"</code>
+				<br><b>Default value:</b>  <code>"bft"</code>
+			</td>
+		</tr>
+		<tr>
 			<td><code>UseCardinals</code></td>
 			<td>Toggles the use of winddirection arrow or cardinals<br>
 				<br><b>Possible values:</b> <code>0 or 1</code>
@@ -195,17 +228,32 @@ The following properties can be configured:
 			</td>
 		</tr>
 		<tr>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
+			<td><code>layout</code></td>
+			<td>Chooses the layout option<br>
+				<br><b>Possible values:</b> <code>"horizontal" or "vertical"</code>
+				<br><b>Default value:</b>  <code>"vertical"</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>iconset</code></td>
+			<td>Selects the style of icons to show<br>
+				<br><b>Possible values:</b> <code>"colourful", "dark", "flat_black", "flat_colourful", "flat_white", "light", "novacon", "sketchy", "VCloudsWeatherIcons", "weezle"</code>
+				<br><b>Default value:</b> <code>"VCloudsWeatherIcons"</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>sysstat</code></td>
+			<td>Toggle sysinfo display<br>
+				<br><b>Possible values:</b> <code>0 or 1</code>
+				<br><b>Default value:</b>  <code>0</code>
+			</td>
+		</tr>
+		<tr>
+			<td><code>debug</code></td>
+			<td>Toggle debug logging<br>
+				<br><b>Possible values:</b> <code>0 or 1</code>
+				<br><b>Default value:</b>  <code>0</code>
+			</td>
+		</tr>
 	</tbody>
 </table>
-
-
